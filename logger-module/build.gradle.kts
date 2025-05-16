@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -33,9 +34,29 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.appcompat.v7)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.runner)
-    androidTestImplementation(libs.espresso.core)
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/levibostian/Multi-Module-Android-dev-environment-lib")
+                credentials {
+                    username = System.getenv("USERNAME")
+                    password = System.getenv("TOKEN")
+                }
+            }
+        }
+
+        publications {
+            register<MavenPublication>("logger") {
+                from(components["release"])
+                groupId = "com.example"
+                artifactId = "logger-module"
+                version = "1.0.0"
+            }
+        }
+    }
 }
