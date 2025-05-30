@@ -55,7 +55,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.example"
                 artifactId = "logger-module"
-                version = "1.0.0"
+                version = System.getenv("VERSION") ?: "1.0.0"
             }
         }
     }
